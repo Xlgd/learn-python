@@ -1,5 +1,4 @@
-# Learn_Python
-## some python programs
+# some programs in python
 
 - 一个简单的ORM框架（orm.py)
 - 一个简单的类以及它的测试代码(mydict.py, mydict_test.py)
