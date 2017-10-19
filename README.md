@@ -1,4 +1,5 @@
 # some programs in python
+## [Python教程-廖学峰的官方网站](https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000)
 
 - 一个简单的ORM框架（orm.py)
 - 一个简单的类以及它的测试代码(mydict.py, mydict_test.py)
