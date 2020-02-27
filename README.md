@@ -1,4 +1,5 @@
-# some programs in python
+# some exercises in python
+
 ### [Python教程-廖学峰的官方网站](https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000)
 
 - 一个简单的ORM框架（orm.py)
@@ -11,3 +12,10 @@
 - sqlite、sqlalchemy编程练习(sqlite.py、sqlalchemy.py)
 - wsgi接口服务练习(wsgi.py、hello.py)
 - 模板和web框架练习(app.py、templates)
+
+## learn_python_the_hard_way
+笨方法学python的练习和英文版书籍
+
+## simple_pascal_interpreter
+### [作者博客地址](https://ruslanspivak.com/)
+使用python实现的一个简单pascal解释器
