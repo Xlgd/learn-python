@@ -10,3 +10,4 @@
 - sqlite、sqlalchemy example(sqlite.py、sqlalchemy.py)
 - wsgi service example(wsgi.py、hello.py)
 - template and web framework example(app.py、templates)
+- simple dir command demo(my_dir.py)
