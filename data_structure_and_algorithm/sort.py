@@ -1,3 +1,7 @@
+from unittest import TestCase
+import random
+
+
 def bubble_sort(arr):
     length = len(arr)
     for i in range(length):
@@ -166,3 +170,83 @@ def radix_sort(arr):
         dev *= 10
         mod *= 10
     return result
+
+
+class TestSort(TestCase):
+    def test_bubble(self):
+        old_arr = [i for i in range(40)]
+        arr = old_arr[:]
+        random.shuffle(arr)
+        assert bubble_sort(arr) == old_arr, 'bubble_sort failed!'
+
+    def test_selection(self):
+        old_arr = [i for i in range(40)]
+        arr = old_arr[:]
+        random.shuffle(arr)
+        assert selection_sort(arr) == old_arr, 'selection_sort failed!'
+
+    def test_insertion(self):
+        old_arr = [i for i in range(40)]
+        arr = old_arr[:]
+        random.shuffle(arr)
+        assert insertion_sort(arr) == old_arr, 'insertion_sort failed!'
+
+    def test_shell(self):
+        old_arr = [i for i in range(40)]
+        arr = old_arr[:]
+        random.shuffle(arr)
+        assert shell_sort(arr) == old_arr, 'shell_sort failed!'
+
+    def test_merge(self):
+        old_arr = [i for i in range(40)]
+        arr = old_arr[:]
+        random.shuffle(arr)
+        assert merge_sort(arr) == old_arr, 'merge_sort failed!'
+
+    def test_quick(self):
+        old_arr = [i for i in range(40)]
+        arr = old_arr[:]
+        random.shuffle(arr)
+        assert quick_sort(arr) == old_arr, 'quick_sort failed!'
+
+    def test_heap(self):
+        old_arr = [i for i in range(40)]
+        arr = old_arr[:]
+        random.shuffle(arr)
+        assert heap_sort(arr) == old_arr, 'heap_sort failed!'
+
+    def test_counting(self):
+        old_arr = [i for i in range(40)]
+        arr = old_arr[:]
+        random.shuffle(arr)
+        assert counting_sort(arr) == old_arr, 'counting_sort failed!'
+
+    def test_bucket(self):
+        old_arr = [i for i in range(40)]
+        arr = old_arr[:]
+        random.shuffle(arr)
+        assert bucket_sort(arr) == old_arr, 'bucket_sort failed!'
+
+    def test_radix(self):
+        old_arr = [i for i in range(40)]
+        arr = old_arr[:]
+        random.shuffle(arr)
+        assert radix_sort(arr) == old_arr, 'radix_sort failed!'
+
+    def test_all(self):
+        self.test_bubble()
+        self.test_selection()
+        self.test_insertion()
+        self.test_shell()
+        self.test_merge()
+        self.test_quick()
+        self.test_heap()
+        self.test_counting()
+        self.test_bucket()
+        self.test_radix()
+
+
+if __name__ == '__main__':
+    test = TestSort()
+    test.test_all()
+    print('test finished!')
