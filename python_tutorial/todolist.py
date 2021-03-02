@@ -9,9 +9,9 @@ Base = declarative_base()
 
 class Table(Base):
     __tablename__ = 'task'
-    id = Column(Integer, primary_key=True, name='id')
+    id = Column(Integer, primary_key=True)
     string_field = Column(String, default='default_value')
-    date_field = Column(Date, default=datetime.today())
+    date_field = Column(Date, default=datetime.today().date())
 
     def __repr__(self):
         return self.string_field
@@ -47,7 +47,7 @@ class Todo:
 
     def print_all(self):
         print('\nAll tasks:')
-        rows = self.session.query(Table).all()
+        rows = self.session.query(Table).order_by(Table.date_field).all()
         if len(rows) == 0:
             print('Nothing to do!')
         else:
@@ -55,7 +55,7 @@ class Todo:
                 print(index, end='')
                 print('. ', end='')
                 print(item.string_field + '. ', end='')
-                print(item.date_field.strftime('%d %b'))
+                print(str(item.date_field.day) + ' ' + item.date_field.strftime('%b'))
 
     def add_task(self):
         print('Enter task')
@@ -71,7 +71,7 @@ class Todo:
         today = datetime.today()
         days_range = []
         days_object = []
-        for d in range(today.weekday() + 1):
+        for d in range(7):
             someday = today + timedelta(days=d)
             days_object.append(someday.date())
             days_range.append(someday.strftime('%Y-%m-%d'))
