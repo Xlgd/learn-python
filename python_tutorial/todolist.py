@@ -29,7 +29,9 @@ class Todo:
             print("1) Today's tasks")
             print("2) Week's tasks")
             print('3) All tasks')
-            print('4) Add task')
+            print('4) Missed tasks')
+            print('5) Add task')
+            print('6) Delete task')
             print('0) Exit')
             self.command = input()
 
@@ -40,7 +42,11 @@ class Todo:
             elif self.command == '3':
                 self.print_all()
             elif self.command == '4':
+                self.print_missed()
+            elif self.command == '5':
                 self.add_task()
+            elif self.command == '6':
+                self.delete_task()
             elif self.command == '0':
                 print('\nBye!')
                 break
@@ -52,10 +58,8 @@ class Todo:
             print('Nothing to do!')
         else:
             for index, item in enumerate(rows, start=1):
-                print(index, end='')
-                print('. ', end='')
-                print(item.string_field + '. ', end='')
-                print(str(item.date_field.day) + ' ' + item.date_field.strftime('%b'))
+                print(str(index) + '. ' + item.string_field + '. ' + str(item.date_field.day)
+                      + ' ' + item.date_field.strftime('%b'))
 
     def add_task(self):
         print('Enter task')
@@ -84,9 +88,7 @@ class Todo:
                 print('Nothing to do!')
             else:
                 for index, item in enumerate(new_rows, start=1):
-                    print(index, end='')
-                    print('. ', end='')
-                    print(item.string_field)
+                    print(str(index) + '. ' + item.string_field)
 
     def print_today(self):
         today = datetime.today()
@@ -96,9 +98,34 @@ class Todo:
             print('Nothing to do!')
         else:
             for index, item in enumerate(rows, start=1):
-                print(index, end='')
-                print('. ', end='')
-                print(item.string_field)
+                print(str(index) + '. ' + item.string_field)
+
+    def print_missed(self):
+        rows = self.session.query(Table).filter(Table.date_field < datetime.today().date()).all()
+        if len(rows) == 0:
+            print('Nothing is missed!')
+        else:
+            for index, item in enumerate(rows, start=1):
+                print(str(index) + '. ' + item.string_field + ' ' + str(item.date_field))
+
+    def delete_task(self):
+        task_dict = {}
+        print('\nChoose the number of the task you want to delete:')
+        rows = self.session.query(Table).order_by(Table.date_field).all()
+        if len(rows) == 0:
+            print('Nothing to do!')
+        else:
+            for index, item in enumerate(rows, start=1):
+                task_dict[index] = item.string_field
+                print(str(index) + '. ' + item.string_field + '. ' + str(item.date_field.day)
+                      + ' ' + item.date_field.strftime('%b'))
+        task = task_dict[int(input())]
+        delete_rows = self.session.query(Table).filter(Table.string_field == task).all()
+        if len(delete_rows) == 0:
+            print('Nothing to delete!')
+        self.session.delete(delete_rows[0])
+        self.session.commit()
+        print('The task has been deleted!')
 
 
 if __name__ == '__main__':
