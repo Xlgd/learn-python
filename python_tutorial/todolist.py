@@ -4,11 +4,14 @@ from sqlalchemy import Column, Integer, String, Date
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime, timedelta
 
+
+
+# create a model class that describes the table in the database.
+# the Table class should inherit from the DeclarativeMeta class that is returned by declarative_base()
+
 Base = declarative_base()
-
-
 class Table(Base):
-    __tablename__ = 'task'
+    __tablename__ = 'task' # specifies the table name in the database
     id = Column(Integer, primary_key=True)
     string_field = Column(String, default='default_value')
     date_field = Column(Date, default=datetime.today().date())
@@ -19,10 +22,12 @@ class Table(Base):
 
 class Todo:
     def __init__(self, db_engine):
+        # create a session to access the database and store data in it.
         session_temp = sessionmaker(bind=db_engine)
         self.session = session_temp()
         self.command = None
 
+    # main
     def run(self):
         while True:
             print('\n')
@@ -51,8 +56,11 @@ class Todo:
                 print('\nBye!')
                 break
 
+    # print all tasks in database
     def print_all(self):
         print('\nAll tasks:')
+
+        # get all tasks
         rows = self.session.query(Table).order_by(Table.date_field).all()
         if len(rows) == 0:
             print('Nothing to do!')
@@ -61,15 +69,19 @@ class Todo:
                 print(str(index) + '. ' + item.string_field + '. ' + str(item.date_field.day)
                       + ' ' + item.date_field.strftime('%b'))
 
+
     def add_task(self):
         print('Enter task')
         task = input()
         print('Enter deadline')
         deadline = input()
+
+        # add new row to the table
         new_row = Table(string_field=task, date_field=datetime.strptime(deadline, format('%Y-%m-%d')).date())
         self.session.add(new_row)
         self.session.commit()
         print('The task has been added!')
+
 
     def print_week(self):
         today = datetime.today()
@@ -90,6 +102,7 @@ class Todo:
                 for index, item in enumerate(new_rows, start=1):
                     print(str(index) + '. ' + item.string_field)
 
+
     def print_today(self):
         today = datetime.today()
         rows = self.session.query(Table).filter(Table.date_field == today.strftime('%Y-%m-%d')).all()
@@ -100,6 +113,7 @@ class Todo:
             for index, item in enumerate(rows, start=1):
                 print(str(index) + '. ' + item.string_field)
 
+
     def print_missed(self):
         rows = self.session.query(Table).filter(Table.date_field < datetime.today().date()).all()
         if len(rows) == 0:
@@ -107,6 +121,7 @@ class Todo:
         else:
             for index, item in enumerate(rows, start=1):
                 print(str(index) + '. ' + item.string_field + ' ' + str(item.date_field))
+
 
     def delete_task(self):
         task_dict = {}
@@ -123,13 +138,19 @@ class Todo:
         delete_rows = self.session.query(Table).filter(Table.string_field == task).all()
         if len(delete_rows) == 0:
             print('Nothing to delete!')
+        
+        # delete row in the table
         self.session.delete(delete_rows[0])
         self.session.commit()
         print('The task has been deleted!')
 
 
 if __name__ == '__main__':
+    # create the database file.
     engine = create_engine('sqlite:///todo.db?check_same_thread=False')
+
+    # create a table in the database file
     Base.metadata.create_all(engine)
+
     todo = Todo(engine)
     todo.run()
