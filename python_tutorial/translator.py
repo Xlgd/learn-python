@@ -6,7 +6,7 @@ languages = ['', 'arabic', 'german', 'english', 'spanish', 'french', 'hebrew', '
 languages2 = ['', 'Arabic', 'German', 'English', 'Spanish', 'French', 'Hebrew', 'Japanese',
               'Dutch', 'Polish', 'Portuguese', 'Romanian', 'Russian', 'Turkish']
 
-
+# write content to "word".txt
 def write_to_file(content):
     with open(word + '.txt', 'w', encoding='utf-8') as f:
         for item in content:
@@ -25,15 +25,15 @@ class Translator:
 
     def main(self):
         if self.to_language == 0:
+            # get the languages except the origin language
             languages_temp = [item for item in languages if item != languages[self.from_language] and item != '']
-            # print(languages_temp)
+
+            # rrocess the target language one by one
             for language in languages_temp:
                 url = 'https://context.reverso.net/translation/' + languages[self.from_language] + '-' \
                       + language + '/' + self.word
-                # print('parse', url)
                 return_words, return_examples = self.translate(url)
                 self.write_to_list(language, return_words, return_examples)
-                # print('done')
         else:
             url = 'https://context.reverso.net/translation/' + languages[source_language] + '-' \
                   + languages[target_language] + '/' + word
@@ -43,6 +43,7 @@ class Translator:
             print(item, end='')
         write_to_file(self.result)
 
+    # send the word to translation website and get translations and examples
     def translate(self, address):
         r = requests.get(address, headers=self.headers)
         self.soup = BeautifulSoup(r.content, 'html.parser')
@@ -55,6 +56,7 @@ class Translator:
         self.result.append('\n' + language_part2 + ' Translations:\n' + words[0] + '\n\n'
                            + language_part2 + ' Examples:\n' + examples[0] + ':' + '\n' + examples[1] + '\n\n')
 
+    # according to the keyword to return the relevant information
     def parse_html(self, path, keyword):
         html = self.soup.select(path)
         all_things = []
